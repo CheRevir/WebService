@@ -1,0 +1,11 @@
+[Unit]
+Description=WebService service
+[Service]
+Type=forking
+#ExecStart=/bin/java -jar /home/WebService/WebService.jar > /home/WebService/log.log
+#ExecStop=kill $MAINPID
+ExecStart=/bin/bash /home/WebService/start.sh
+ExecStop=/bin/bash /home/WebService/stop.sh
+
+[Install]
+WantedBy=multi-user.target
