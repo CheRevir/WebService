@@ -1,10 +1,14 @@
 package com.cere.service.controller;
 
+import com.cere.service.entity.User;
+import com.cere.service.model.Response;
 import com.cere.service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 /**
  * Created by CheRevir on 2021/7/21
@@ -20,7 +24,7 @@ public class UserController {
     }
 
     @GetMapping
-    public String get(){
-        return "user";
+    public Mono<Response<User>> get(@RequestParam long id) {
+        return Response.check(mUserRepository.findById(id).map(User::toResponse));
     }
 }
