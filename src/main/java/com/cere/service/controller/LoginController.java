@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 /**
  * Created by CheRevir on 2021/8/27
  */
@@ -28,10 +30,10 @@ public class LoginController {
     }
 
     @PostMapping()
-    public Mono<Response<Object>> login(@RequestBody Login login) {
+    public Mono<Response<String>> login(@RequestBody Login login) {
         mLog.error(login);
         if (TextUtils.isEmpty(login.getAccount()) || TextUtils.isEmpty(login.getPassword())) {
-            return Mono.just(new Response<>(false, Constants.RESPONSE_CODE_NONE, String.format("%s为空", "账户或密码")));
+            return Mono.just(ResponseBuilder.empty(Constants.RESPONSE_CODE_NONE, String.format("%s为空", "账户或密码")));
         }
         return mUserRepository
                 .findAll()
@@ -40,11 +42,13 @@ public class LoginController {
                 .map(user -> {
                     mLog.error(user);
                     if (login.getPassword().equals(user.getPassword())) {
-                        return new Response<>(true, Constants.RESPONSE_MSG_LOGIN_SUCCESS);
+                        String uuid = UUID.randomUUID().toString();
+                        return new Response<>(true, Constants.RESPONSE_CODE_SUCCESS,
+                                Constants.RESPONSE_MSG_LOGIN_SUCCESS, uuid);
                     }
-                    return ResponseBuilder.empty("账号或密码错误");
+                    return ResponseBuilder.empty("账号或密码错误", "");
                 })
-                .switchIfEmpty(Mono.just(ResponseBuilder.empty("账号或密码错误")))
+                .switchIfEmpty(Mono.just(ResponseBuilder.empty("账号或密码错误", "")))
                 .doOnError(mLog::error);
     }
 }

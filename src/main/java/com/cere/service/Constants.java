@@ -5,7 +5,7 @@ package com.cere.service;
  */
 public class Constants {
     //--------------------------------------------------Response Code--------------------------------------------------
-    public static final int RESPONSE_CODE_SUCCESS = 0;
+    public static final int RESPONSE_CODE_SUCCESS = 1;
     public static final int RESPONSE_CODE_NONE = -1;
     //---------------------------------------------------Response Msg---------------------------------------------------
     public static final String RESPONSE_MSG_SUCCESS = "成功";
